@@ -9,7 +9,14 @@ class CartItem extends React.Component {
       qty: 1,
       img: "",
     };
+
+    // this.increaseQuantity = this.increaseQuantity.bind(this);
   }
+
+  increaseQuantity = () => {
+    // by using arrow function it will auomatically bind this
+    console.log("this", this.state);
+  };
 
   render() {
     const { price, title, qty } = this.state; // object restructuring
@@ -30,6 +37,7 @@ class CartItem extends React.Component {
               alt="increase"
               className="action-icons"
               src="https://image.flaticon.com/icons/svg/992/992651.svg"
+              onClick={this.increaseQuantity}
             />
             <img
               alt="decrease"
