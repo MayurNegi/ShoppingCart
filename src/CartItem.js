@@ -11,14 +11,65 @@ class CartItem extends React.Component {
     };
 
     // this.increaseQuantity = this.increaseQuantity.bind(this);
+    this.testing();
+  }
+
+  testing() {
+    const promise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve("done");
+      }, 5000);
+    });
+
+    promise.then(() => {
+      // setState acts like a synchronus call in promise and ajax
+      this.setState({ qty: this.state.qty + 10 });
+
+      this.setState({ qty: this.state.qty + 10 });
+
+      this.setState({ qty: this.state.qty + 10 });
+
+      console.log("state", this.state);
+    });
   }
 
   increaseQuantity = () => {
     // by using arrow function it will auomatically bind this
-    console.log("this", this.state);
+    // console.log("this", this.state);
+
+    // setstate form 1
+    // this.setState({
+    //   qty: this.state.qty + 1,
+    // });
+
+    //setState form 2  - if prevState required use this
+    this.setState(
+      // set state is an asynchronus function.
+      (prevState) => {
+        return {
+          qty: prevState.qty + 1,
+        };
+      },
+      () => {
+        // this callback is executed when setstate is executed
+        console.log("this.state", this.state);
+      }
+    );
+  };
+
+  decreaseQuantity = () => {
+    this.setState((prevState) => {
+      if (prevState.qty > 0) {
+        return {
+          qty: prevState.qty - 1,
+        };
+      }
+      return;
+    });
   };
 
   render() {
+    console.log("render");
     const { price, title, qty } = this.state; // object restructuring
 
     return (
@@ -43,6 +94,7 @@ class CartItem extends React.Component {
               alt="decrease"
               className="action-icons"
               src="https://image.flaticon.com/icons/svg/992/992683.svg"
+              onClick={this.decreaseQuantity}
             />
             <img
               alt="delete"
