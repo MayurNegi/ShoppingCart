@@ -7,10 +7,8 @@ class CartItem extends React.Component {
   //       resolve("done");
   //     }, 5000);
   //   });
-
   //   promise.then(() => {
   //     // setState acts like a synchronus call in promise and ajax
-
   //     // works 3 times
   //     this.setState({ qty: this.state.qty + 10 });
   //     this.setState({ qty: this.state.qty + 10 });
@@ -44,20 +42,15 @@ class CartItem extends React.Component {
   //   );
   // };
 
-  // decreaseQuantity = () => {
-  //   this.setState((prevState) => {
-  //     if (prevState.qty > 0) {
-  //       return {
-  //         qty: prevState.qty - 1,
-  //       };
-  //     }
-  //     return;
-  //   });
-  // };
-
   render() {
     console.log("this.props", this.props);
     const { price, title, qty } = this.props.product; // object restructuring
+    const {
+      product,
+      onIncreaseQuantity,
+      onDecreaseQuantity,
+      onDeleteProduct,
+    } = this.props;
 
     return (
       <div className="cart-item">
@@ -77,19 +70,20 @@ class CartItem extends React.Component {
               className="action-icons"
               src="https://image.flaticon.com/icons/svg/992/992651.svg"
               onClick={() => {
-                this.props.onIncreaseQuantity(this.props.product);
+                onIncreaseQuantity(product);
               }}
             />
             <img
               alt="decrease"
               className="action-icons"
               src="https://image.flaticon.com/icons/svg/992/992683.svg"
-              onClick={() => this.props.onDecreaseQuantity(this.props.product)}
+              onClick={() => onDecreaseQuantity(product)}
             />
             <img
               alt="delete"
               className="action-icons"
               src="https://image.flaticon.com/icons/svg/1214/1214428.svg"
+              onClick={() => onDeleteProduct(product.id)}
             />
           </div>
         </div>
