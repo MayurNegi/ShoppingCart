@@ -20,40 +20,40 @@ class CartItem extends React.Component {
   //   });
   // }
 
-  increaseQuantity = () => {
-    // by using arrow function it will auomatically bind this
-    // console.log("this", this.state);
+  // increaseQuantity = () => {
+  //   // by using arrow function it will auomatically bind this
+  //   // console.log("this", this.state);
 
-    // setstate form 1
-    // this.setState({
-    //   qty: this.state.qty + 1,
-    // });
+  //   // setstate form 1
+  //   // this.setState({
+  //   //   qty: this.state.qty + 1,
+  //   // });
 
-    //setState form 2  - if prevState required use this
-    this.setState(
-      // set state is an asynchronus function.
-      (prevState) => {
-        return {
-          qty: prevState.qty + 1,
-        };
-      },
-      () => {
-        // this callback is executed when setstate is executed
-        console.log("this.state", this.state);
-      }
-    );
-  };
+  //   //setState form 2  - if prevState required use this
+  //   this.setState(
+  //     // set state is an asynchronus function.
+  //     (prevState) => {
+  //       return {
+  //         qty: prevState.qty + 1,
+  //       };
+  //     },
+  //     () => {
+  //       // this callback is executed when setstate is executed
+  //       console.log("this.state", this.state);
+  //     }
+  //   );
+  // };
 
-  decreaseQuantity = () => {
-    this.setState((prevState) => {
-      if (prevState.qty > 0) {
-        return {
-          qty: prevState.qty - 1,
-        };
-      }
-      return;
-    });
-  };
+  // decreaseQuantity = () => {
+  //   this.setState((prevState) => {
+  //     if (prevState.qty > 0) {
+  //       return {
+  //         qty: prevState.qty - 1,
+  //       };
+  //     }
+  //     return;
+  //   });
+  // };
 
   render() {
     console.log("this.props", this.props);
@@ -76,13 +76,15 @@ class CartItem extends React.Component {
               alt="increase"
               className="action-icons"
               src="https://image.flaticon.com/icons/svg/992/992651.svg"
-              onClick={this.increaseQuantity}
+              onClick={() => {
+                this.props.onIncreaseQuantity(this.props.product);
+              }}
             />
             <img
               alt="decrease"
               className="action-icons"
               src="https://image.flaticon.com/icons/svg/992/992683.svg"
-              onClick={this.decreaseQuantity}
+              onClick={() => this.props.onDecreaseQuantity(this.props.product)}
             />
             <img
               alt="delete"
