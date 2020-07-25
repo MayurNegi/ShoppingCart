@@ -1,5 +1,6 @@
 import React from "react";
 
+// for stateless component we can use function
 const CartItem = (props) => {
   // testing() {
   //   const promise = new Promise((resolve, reject) => {
