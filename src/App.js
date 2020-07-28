@@ -38,26 +38,29 @@ class App extends React.Component {
     //     });
     //   });
 
-    this.db.collection("products").onSnapshot((snapshot) => {
-      // will update without refreshing page on changing from firebase
-      console.log(snapshot);
+    this.db
+      .collection("products")
+      // .where("price", "==", 999)
+      // .orderBy("price" , 'desc')
+      .onSnapshot((snapshot) => {
+        // will update without refreshing page on changing from firebase
+        console.log(snapshot);
 
-      snapshot.docs.map((doc) => {
-        console.log(doc.data());
-        return "";
-      });
+        snapshot.docs.map((doc) => {
+          console.log(doc.data());
+        });
 
-      const products = snapshot.docs.map((doc) => {
-        const data = doc.data();
-        data["id"] = doc.id;
-        return data;
-      });
+        const products = snapshot.docs.map((doc) => {
+          const data = doc.data();
+          data["id"] = doc.id;
+          return data;
+        });
 
-      this.setState({
-        products,
-        loading: false,
+        this.setState({
+          products,
+          loading: false,
+        });
       });
-    });
   }
 
   addProduct = () => {
@@ -82,11 +85,24 @@ class App extends React.Component {
     const { products } = this.state;
     const index = products.indexOf(product);
 
-    products[index].qty += 1;
-    this.setState({
-      products: products,
-      loading: false,
-    });
+    // products[index].qty += 1;
+    // this.setState({
+    //   products: products,
+    //   loading: false,
+    // });
+
+    const docRef = this.db.collection("products").doc(products[index].id);
+
+    docRef
+      .update({
+        qty: products[index].qty + 1,
+      })
+      .then(() => {
+        console.log("qty increased");
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
   };
 
   handleDecreaseQuantity = (product) => {
@@ -94,24 +110,49 @@ class App extends React.Component {
     const { products } = this.state;
     const index = products.indexOf(product);
 
+    // if (products[index].qty === 0) {
+    //   return;
+    // }
+    // products[index].qty -= 1;
+    // this.setState({
+    //   products: products,
+    // });
+
     if (products[index].qty === 0) {
       return;
     }
 
-    products[index].qty -= 1;
+    const docRef = this.db.collection("products").doc(products[index].id);
 
-    this.setState({
-      products: products,
-    });
+    docRef
+      .update({
+        qty: products[index].qty - 1,
+      })
+      .then(() => {
+        console.log("qty decreased");
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
   };
 
   handleDeleteProduct = (id) => {
     const { products } = this.state;
-    const items = products.filter((item) => item.id !== id);
+    // const items = products.filter((item) => item.id !== id);
+    // this.setState({
+    //   products: items,
+    // });
 
-    this.setState({
-      products: items,
-    });
+    const docRef = this.db.collection("products").doc(id);
+
+    docRef
+      .delete()
+      .then(() => {
+        console.log("deleted successfully");
+      })
+      .catch((err) => {
+        console.log("Error", err);
+      });
   };
 
   getCartCount = () => {
@@ -142,9 +183,9 @@ class App extends React.Component {
     return (
       <div className="App">
         <Navbar count={this.getCartCount()} />
-        <button onClick={this.addProduct} style={{ padding: 20, fontSize: 20 }}>
+        {/* <button onClick={this.addProduct} style={{ padding: 20, fontSize: 20 }}>
           Add Product
-        </button>
+        </button> */}
         <Cart
           onIncreaseQuantity={this.handleIncreaseQuantity}
           onDecreaseQuantity={this.handleDecreaseQuantity}
